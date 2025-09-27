@@ -1,0 +1,260 @@
+.w3-content {
+  max-width: 980px;
+  margin: auto
+}
+
+.w3-tooltip,
+.w3-display-container {
+  position: relative
+}
+
+.w3-tooltip .w3-text {
+  display: none
+}
+
+.w3-tooltip:hover .w3-text {
+  display: inline-block
+}
+
+.w3-display-container:hover .w3-display-hover {
+  display: block
+}
+
+.w3-display-container:hover span.w3-display-hover {
+  display: inline-block
+}
+
+.w3-display-hover {
+  display: none
+}
+
+.w3-justify {
+  text-align: justify !important
+}
+
+.w3-center {
+  text-align: center !important
+}
+
+.w3-section {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important
+}
+
+.w3-large {
+  font-size: 18px !important
+}
+
+.w3-text-white,
+.w3-hover-text-white:hover {
+  color: #fff !important
+}
+
+.w3-text-black,
+.w3-hover-text-black:hover {
+  color: #000 !important
+}
+
+.w3-display-bottommiddle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 0%);
+  -ms-transform: translate(-50%, 0%)
+}
+
+.w3-left {
+  float: left !important
+}
+
+.w3-right {
+  float: right !important
+}
+
+.w3-padding-left {
+  padding-left: 16px !important
+}
+
+.w3-padding-right {
+  padding-right: 16px !important
+}
+
+.w3-text-khaki,
+.w3-hover-text-khaki:hover {
+  color: #b4aa50 !important
+}
+
+.w3-border-0 {
+  border: 0 !important
+}
+
+.w3-border {
+  border: 1px solid #ccc !important
+}
+
+.w3-transparent {
+  background-color: transparent !important
+}
+
+.w3-white,
+.w3-hover-white:hover {
+  color: #000 !important;
+  background-color: #fff !important
+}
+
+.w3-black,
+.w3-hover-black:hover {
+  color: #fff !important;
+  background-color: #000 !important
+}
+
+.mySlides {
+  display: none
+}
+
+.w3-left,
+.w3-right,
+.w3-badge {
+  cursor: pointer
+}
+
+.w3-badge,
+.w3-tag,
+.w3-sign {
+  background-color: #000;
+  color: #fff;
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center
+}
+
+.w3-badge {
+  border-radius: 50%
+}
+
+.w3-badge {
+  height: 13px;
+  width: 13px;
+  padding: 0
+}
+
+
+.row>.column {
+  padding: 0 8px;
+}
+
+body {
+  background-color: #006EAB;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.div-content {
+  background-color: #ffdca8;
+  padding: 1px 35px 1px 35px;
+  margin: 10px;
+  border: 3px;
+  border-color: #000;
+  border-style: solid;
+  border-radius: 8px;
+  box-shadow: 5px 5px #01070B;
+}
+
+.dialog-container {
+  width: 400px;
+  height: 300px;
+  background-color: white;
+  border: 3px solid #040000;
+  border-radius: 3px;
+  box-shadow: 4px 4px #040100;
+  overflow: hidden;
+}
+
+.dialog-title {
+  background-color: #01C0A6;
+  color: black;
+  border-bottom: 3px solid #040000;
+  font-weight: bold;
+  font-size: 24px;
+  padding: 10px;
+}
+
+.dialog-body {
+  padding: 10px;
+}
+
+.column {
+  float: left;
+  width: 25%;
+}
+
+.column3 {
+  float: left;
+  width: 33%;
+}
+
+.overlay {
+  visibility: hidden;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-content: center;
+}
+
+.overlay-content {
+  position: absolute;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+img.demo {
+  opacity: 0.6;
+}
+
+.nav-element {
+  text-decoration-color: #000;
+  color: black;
+}
+
+.navbar-nav li a {
+  color: #000;
+  font-size: 20px;
+  font-weight:bold;
+  text-decoration-color: #000;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: black;
+  text-decoration-color: #000;
+}
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus {
+  color: #221f1f;
+  font-weight:bolder;
+}
+
+.hover-rectangle {
+  border: 3px solid transparent;
+  border-radius: 5px;
+  transition: border 0.2s ease-in-out;
+}
+
+.hover-rectangle:hover {
+  border: 3px solid black;
+  border-radius: 5px;
+}

@@ -1,0 +1,63 @@
+<h2>Chromeleon</h2>
+<div class="row">
+  <div class="col-md-6">
+    <br />
+    Chromeleon is a software platform used for chemical analysis, particularly in the field of chromatography. It enables
+    chemists to detect and analyze different components of chemical mixtures. The name Chromeleon is a clever combination of
+    chromatography and chameleon, a color-changing animal.
+    <br />
+    <br />
+    The Chromeleon software is capable of controlling instruments, collecting, managing and processing data, and generating
+    reports. It is also designed to be compliance-friendly, with features for user management, data versioning, and event
+    logging. Additionally, the software can be scaled from a single desktop workstation to an enterprise setup with hundreds
+    of instruments and lab computers, and comes with built-in features for instrument servers, data vaults, load balancing,
+    and network fault protection.
+    <br />
+    <br />
+  </div>
+  
+
+    <div class="col-md-6">
+      <img src="Img/CM7_data_processing.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%;" />
+    </div>
+    <!-- 
+      <img src="Img/CM7_instruments.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%;" />
+      <img src="Img/CM7_report_designer.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%;" />
+    -->
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <img src="Img/CM7_ipd.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%;" />
+  </div>
+  <!--
+      <img src="Img/CM7_ntms_sieve.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%; margin-top: -60px;" />
+      <img src="Img/CM7_ntms_bpf.png" onclick="showImage(this)" class="hover-rectangle" style="width:100%; margin-top: -60px;" />
+  -->
+  <div class="col-md-6">
+    <br />But what did I do exactly?
+    <ul>
+      <li>Implemented features: Intact Protein Deconvolution (IPD) and Non-Targeted Mass Spectra (NTMS) - two different
+        algorithms for NTMS were two separate features. Each feature included parameters collection, data processing and
+        results presentation in various charts and tables,</li>
+      <li>Designed and implemented API & backend for Data Processing Service (windows service for IPD and NTMS above),</li>
+      <li>Workflow and API for Application Processing Service - another windows service for very large data sets (processing
+        moved from the client to the server and cloud),</li>
+      <li>Developed a bridge to the service of another application (BioPharma), allowing our software to use its algorithms
+        (C#, SignalR, JSON),</li>
+      <li>Performance improvement for searches on the remote machine. Results are propagated and transferred asynchronously
+        while search is in progress,</li>
+      <li>Performance improvement in New Sequence wizard.</li>
+    </ul>
+  </div>
+
+</div>
+
+<br />
+<br />
+Chromeleon official website:
+
+<a href="https://www.thermofisher.com/order/catalog/product/CHROMELEON7"
+  target="_blank">https://www.thermofisher.com/order/catalog/product/CHROMELEON7</a>
+
+<br />
+<br />

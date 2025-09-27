@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GPankowski.com</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $("#Policy").load("Projects/Thermo/policy.html");
+      $("#Audit").load("Projects/Thermo/audit.html");
+      $("#Chromeleon").load("Projects/Thermo/chromeleon.html");
+      $("#PA").load("Projects/Thermo/pa.html");
+      $("#Ics6000").load("Projects/Thermo/ics6000.html");
+
+      $("#Connexx").load("Projects/SMI/connexx.html");
+      $("#UniQC").load("Projects/SMI/uniqc.html");
+
+      $("#Hypermark").load("Projects/Hylax/hypermark.html");
+      $("#Radiant").load("Projects/Hylax/radiant.html");
+      $("#3DMarking").load("Projects/Hylax/3dmarking.html");
+      $("#Fluidigm").load("Projects/Hylax/fluidigm.html");
+      $("#TwinHead").load("Projects/Hylax/twinhead.html");
+      $("#MotorDriver").load("Projects/Hylax/motordriver.html");
+
+      $("#BddWebsite").load("Projects/BDD/bdd_website.html");
+
+      $("#J2ME").load("Projects/Uni/j2me.html");
+      $("#Kiosk").load("Projects/Uni/kiosk.html");
+      $("#NetChess").load("Projects/Uni/netchess.html");
+      $("#Soccer").load("Projects/Uni/soccer.html");
+    });
+  </script>
+
+  <!-- script for image preview -->
+  <script>
+    function showImage(image) {
+      var overlay = document.getElementById("overlay");
+      var overlayContent = document.getElementById("overlayContent");
+      var overlayImage = document.getElementById("overlayImage");
+      overlayImage.src = image.src;
+      overlayImage.onload = function() {
+        console.log("Image loaded: " + overlayImage.src);
+      };
+      
+      // Cap the size
+      var screenWidth = window.innerWidth;
+      var screenHeight = window.innerHeight;
+      overlayImage.style.maxWidth = (screenWidth*0.9) + "px";
+      overlayImage.style.maxHeight = (screenHeight*0.9) + "px";
+      
+      // Center the image
+      var contentWidth = overlayContent.offsetWidth;
+      var contentHeight = overlayContent.offsetHeight;
+      overlayContent.style.left = (screenWidth - contentWidth) / 2 + "px";
+      overlayContent.style.top = (screenHeight - contentHeight) / 2 + "px";
+    
+      // display
+      overlay.style.visibility = "visible";
+
+      // Add event listener to close the modal when clicked
+      overlay.addEventListener("click", function () {
+        overlay.style.visibility = "hidden";
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-default" style="border-radius: 0px; border: 0px; ">
+    <div class="container-fluid" style="background-color: #006EAB">
+      <div class="col-md-1"></div>
+      <!-- Logo -->
+      <div class="navbar-header">
+        <div class="navbar-brand" style="background-color: #000000; color: white; text-decoration: underline; font-size: 20px;
+      font-weight:bold;">GREG's PORTFOLIO</div>
+      </div>
+      
+      <!-- Menu Items -->
+      <div style="float: right">
+        <ul class="nav navbar-nav">
+          <li style="text-decoration: underline; text-decoration-color: #000;"><a href="#">PORTFOLIO</a></li>
+          <li><a href="resume.html">RESUME</a></li>
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <br /><br />
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12" style="background-color: #FD6F01; color: #000000;">
+        <h2><b>Thermo Fisher Scientific</b></h2>
+      </div>
+    </div>
+    <br />
+    <div id="Policy" class="div-content"></div>
+    <br />
+    <div id="Audit" class="div-content"></div>
+    <br />
+    <div id="Chromeleon" class="div-content"></div>
+    <br />
+    <div id="PA" class="div-content"></div>
+    <br />
+    <div id="Ics6000" class="div-content"></div>
+    <br /><br /><br />
+
+    <div class="row">
+      <div class="col-md-12" style="background-color: #FD6F01; color: #000000;">
+        <h2><b>Siemens Medical Instruments (currently WS Audiology)</b></h2>
+      </div>
+    </div>
+    <br />
+    <div id="Connexx" class="div-content"></div>
+    <br />
+    <div id="UniQC" class="div-content"></div>
+    <br /><br /><br />
+
+    <div class="row">
+      <div class="col-md-12" style="background-color: #FD6F01; color: #000000;">
+        <h2><b>Hypertronics (acquired by Coherent)</b></h2>
+      </div>
+    </div>
+    <br />
+    <div id="Hypermark" class="div-content"></div>
+    <br />
+    <div id="Radiant" class="div-content"></div>
+    <br />
+    <div id="3DMarking" class="div-content"></div>
+    <br />
+    <div id="Fluidigm" class="div-content"></div>
+    <br />
+    <div id="TwinHead" class="div-content"></div>
+    <br />
+    <div id="MotorDriver" class="div-content"></div>
+    <br /><br /><br />
+
+    <div class="row">
+      <div class="col-md-12" style="background-color: #FD6F01; color: #000000;">
+        <h2><b>Brand Distribution and Development</b></h2>
+      </div>
+    </div>
+    <br />
+    <div id="BddWebsite" class="div-content"></div>
+    <br /><br /><br />
+
+    <div class="row">
+      <div class="col-md-12" style="background-color: #FD6F01; color: #000000;">
+        <h2><b>University Projects</b></h2>
+      </div>
+    </div>
+    <br />
+    <div id="J2ME" class="div-content"></div>
+    <br />
+    <div id="Kiosk" class="div-content"></div>
+    <br />
+    <div id="NetChess" class="div-content"></div>
+    <br />
+    <div id="Soccer" class="div-content"></div>
+    <br /><br /><br />
+  </div>
+  
+  <div id="overlay" class="overlay">
+    <div id="overlayContent" class="overlay-content">
+      <img id="overlayImage" >
+    </div>
+  </div>
+
+</body>
+</html>

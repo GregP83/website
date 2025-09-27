@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GPankowski.com</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $("#includedBalloonPop").load("BalloonPop/game.html");
+    });
+  </script>
+</head>
+
+<body style="overflow-y: scroll;">
+  <nav class="navbar navbar-default" style="border-radius: 0px; border: 0px;">
+    <div class="container-fluid" style="background-color: #006EAB">
+      <div class="col-md-1"></div>
+      <!-- Logo -->
+      <div class="navbar-header">
+        <div class="navbar-brand"
+          style="background-color: #000000; color: white; text-decoration: underline; font-size: 20px; font-weight:bold;">
+          GREG's CONTACT</div>
+      </div>
+
+      <!-- Menu Items -->
+      <div style="float: right">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">PORTFOLIO</a></li>
+          <li><a href="resume.html">RESUME</a></li>
+          <li style="text-decoration: underline; text-decoration-color: #000;"><a href="#">CONTACT</a></li>
+        </ul>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="div-content">
+      <h3>
+        Phone: +1 (408) 493-9398<br /><br />
+        E-mail: <a href="mailto:greg.pankowski@gmail.com">greg.pankowski@gmail.com</a><br /><br />
+        LinkedIn: <a href="https://www.linkedin.com/in/grzegorz-pankowski-aa292070"
+          target="_blank">https://www.linkedin.com/in/grzegorz-pankowski-aa292070</a><br /><br />
+      </h3>
+    </div>
+    <br />
+    <div id="chrome-desktop-div" style="display:none;">
+      <div class="div-content" style="display: flex; justify-content: center; align-items: center;">
+
+        <div class="col-md-7" style="position: relative;height: 600;">
+          <p>
+          <h2 style="line-height: 130%;">
+            Thank you for visiting. <br />
+            Here I prepared something extra specially for you...<br />
+          </h2>
+          </p>
+
+          <p>
+            Music by <a href="https://opengameart.org/users/codemanu" target="_blank">CodeManu</a> downloaded from <a
+              href="https://opengameart.org/content/platformer-game-music-pack" target="_blank">OpenGameArt.org</a>.
+          </p>
+        </div>
+        <div class="col-md-5">
+
+          <canvas id="myCanvas" width="400" height="600"
+            style="border:1px solid #d3d3d3; margin-top: 20px; margin-bottom: 20px; float:right">
+            Your browser does not support the HTML5 canvas tag.</canvas><br />
+
+          <br /><br />
+          <div style="display:none;">
+            <img id="sky" src="BalloonPop/bluesky_1136x640.png">
+            <img id="pow" src="BalloonPop/pow.png">
+            <img id="balloonGreen" src="BalloonPop/balloon_green.png">
+            <img id="balloonOrange" src="BalloonPop/balloon_orange.png">
+            <img id="balloonPurple" src="BalloonPop/balloon_purple.png">
+            <img id="balloonBlue" src="BalloonPop/balloon_blue.png">
+            <img id="balloonRed" src="BalloonPop/balloon_red.png">
+            <img id="balloonYellow" src="BalloonPop/balloon_yellow.png">
+          </div>
+
+          <script>
+            // 
+            // Hey - thanks for checking my code too
+            // 
+            // I'm not a JavaScript developer and I hack it quickly and dirty,
+            // just for fun, so don't judge me on it ;)
+            //
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+
+            var lastRender = 0
+            var maxFPS = 200; // The maximum FPS we want to allow
+
+            var balloons = [];
+
+            var imageSky = document.getElementById('sky');
+            var imagePow = document.getElementById('pow');
+            var balloonImages = [
+              document.getElementById('balloonGreen'),
+              document.getElementById('balloonOrange'),
+              document.getElementById('balloonPurple'),
+              document.getElementById('balloonBlue'),
+              document.getElementById('balloonRed'),
+              document.getElementById('balloonYellow')];
+            var audio = new Audio('BalloonPop/music.mp3');
+
+            var canvasWidth = 400;
+            var canvasHeigth = 600;
+            var balloonWidth = 110;
+            var balloonHeight = 240;
+            var speed = 0;
+            var maxSpeed = 0;
+            var concurrentBaloons = 0.5;
+            var gameStarted = false;
+            var paused = false;
+
+            function start_music() {
+              if (gameStarted) return;
+              gameStarted = true;
+
+              audio.loop = true;
+              audio.volume = 0.5;
+              audio.play();
+            }
+
+            function draw_first() {
+              if (!gameStarted && balloons.length == 0) {
+                var newBalloon = new Balloon();
+                newBalloon.X = (canvasWidth - balloonWidth) / 2
+                newBalloon.Y = (canvasHeigth - balloonHeight) / 2
+                balloons.push(newBalloon);
+              }
+            }
+
+            // main loop
+            function loop(timestamp) {
+              // Throttle the frame rate.    
+              if (timestamp < lastRender + (1000 / maxFPS)) {
+                window.requestAnimationFrame(loop);
+                return;
+              }
+
+              draw_first()
+              if (!paused) {
+                update()
+              }
+              draw()
+
+              lastRender = timestamp
+              window.requestAnimationFrame(loop)
+            }
+
+            function update() {
+              if (!gameStarted) return;
+              // randomly add balloons
+              if (Math.random() > 0.9 && balloons.length < concurrentBaloons) {
+                var newBalloon = new Balloon();
+                balloons.push(newBalloon);
+              }
+
+              // update balloons
+              balloons.forEach(function (b) {
+                b.updateMe();
+              });
+            }
+
+            function draw() {
+              ctx.drawImage(imageSky, 0, 0, canvasWidth, canvasHeigth);
+
+              // draw balloons
+              balloons.forEach(function (b) {
+                b.drawMe();
+              });
+
+              ctx.fillStyle = "white";
+              ctx.fillRect(0, 0, canvasWidth, 40);
+              ctx.fillStyle = "black";
+              ctx.font = "22px Arial";
+              if (audio.volume != 0) {
+                ctx.fillText("🔊", 5, 28);
+              } else {
+                ctx.fillText("🔇", 5, 28);
+              }
+              if (gameStarted) {
+                if (paused) {
+                  ctx.fillText("▶", 45, 28);
+                } else {
+                  ctx.fillText("⏸", 40, 28);
+                }
+              }
+              ctx.fillText("Speed: " + 4 * speed, 110, 30);
+              if (maxSpeed >= 15)
+                ctx.fillStyle = "red";
+              if (maxSpeed >= 20)
+                ctx.font = "bold 22px Arial";
+              if (maxSpeed >= 25)
+                ctx.fillStyle = "orange";
+              if (maxSpeed >= 30)
+                ctx.fillStyle = "yellow";
+              ctx.fillText("Max Speed: " + 4 * maxSpeed, 230, 30);
+            }
+
+            // class balloon
+            function Balloon() {
+              this.X = Math.floor(Math.random() * (canvasWidth - balloonWidth));
+              this.Y = canvasHeigth;
+              this.IsPop = false;
+              this.AfterPopCountDown = 25;
+              this.BalloonColorIndex = Math.floor(Math.random() * balloonImages.length);
+
+              // update balloon:
+              this.updateMe = function () {
+                this.Y -= speed;
+                this.X += -0.5 + Math.random();
+
+                if (this.IsPop) {
+                  this.Y += 3;
+                  this.X += 1;
+                  this.AfterPopCountDown -= 1;
+                }
+
+                if (this.Y < - balloonHeight || this.AfterPopCountDown < 0) {
+                  // remove itself
+                  if (!this.IsPop)
+                    speed = Math.max(1, speed - 0.25);
+
+                  //console.log("balloonSpeed: " + speed + " , concurrent:" + concurrentBaloons);
+                  balloons.splice(balloons.indexOf(this), 1);
+                }
+              }
+
+              // draw balloon:
+              this.drawMe = function () {
+                ctx.drawImage(balloonImages[this.BalloonColorIndex], this.X, this.Y, balloonWidth, balloonHeight);
+                if (this.IsPop) {
+                  ctx.drawImage(imagePow, this.X - 50, this.Y - 20, 250, 183);
+                }
+              }
+            }
+
+            // Add event listener for `click` events.
+            c.addEventListener('mousedown', function (event) {
+              var canvasBounds = c.getBoundingClientRect();
+              var x = event.clientX - canvasBounds.left;
+              var y = event.clientY - canvasBounds.top;
+              //console.log("x="+x+" ,y="+y);
+
+              if (0 < x && x < 40 && 0 < y && y < 40) {
+                if (audio.volume != 0) {
+                  audio.volume = 0;
+                }
+                else {
+                  audio.volume = 0.5;
+                }
+              }
+
+              if (gameStarted && 40 < x && x < 75 && 0 < y && y < 40) {
+                paused = !paused;
+                if (paused && audio.volume === 0.5){
+                  audio.volume = 0.0001;
+                }
+                if (!paused && audio.volume === 0.0001) {
+                  audio.volume = 0.5;
+                }
+              }
+
+              if (!paused) {
+                balloons.forEach(function (balloon) {
+                  if (y > balloon.Y && y < balloon.Y + balloonHeight && x > balloon.X && x < balloon.X + balloonWidth) {
+                    balloon.IsPop = true;
+                    if (audio.volume > 0) {
+                      var audioPop = new Audio('BalloonPop/balloon-pop.flac');
+                      audioPop.volume = 0.3;
+                      audioPop.play();
+                    }
+                    speed = Math.max(1.25, speed + 0.25);
+                    speed = Math.min(speed, 30); // speed upper limit
+                    maxSpeed = Math.max(maxSpeed, speed);
+                    concurrentBaloons = Math.max(1, concurrentBaloons + 1);
+                    concurrentBaloons = Math.min(concurrentBaloons, 200); // concurrent upped limit
+                    //console.log("Speed: " + speed + " , concurrent:" + concurrentBaloons);
+                    //console.log("balloons: " + balloons.length);
+                    start_music();
+                  }
+                });
+              }
+            }, false);
+
+            window.requestAnimationFrame(loop)
+
+          </script>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Check if the user is using Chrome
+      var isChrome = /Chrome/.test(navigator.userAgent);
+
+      // Check if the user is on a desktop device
+      var isDesktop = window.innerWidth > 768; // Set your own threshold for desktop width
+
+      // If the user is using Chrome on a desktop device, show the div
+      if (isChrome && isDesktop) {
+        document.getElementById("chrome-desktop-div").style.display = "block";
+      }
+    </script>
+  </div>
+  <br /><br /><br />
+
+</body>
+
+</html>

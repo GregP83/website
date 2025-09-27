@@ -1,0 +1,166 @@
+
+	<canvas id="myCanvas" width="400" height="600" style="border:1px solid #d3d3d3;">
+		Your browser does not support the HTML5 canvas tag.</canvas>
+
+	<div style="display:none;">
+		<img id="sky" src="BalloonPop/bluesky_2048x1536.png">
+		<img id="pow" src="BalloonPop/pow.png">
+		<img id="balloonGreen" src="BalloonPop/balloon_green.png">
+		<img id="balloonOrange" src="BalloonPop/balloon_orange.png">
+		<img id="balloonPurple" src="BalloonPop/balloon_purple.png">
+		<img id="balloonBlue" src="BalloonPop/balloon_blue.png">
+		<img id="balloonRed" src="BalloonPop/balloon_red.png">
+		<img id="balloonYellow" src="BalloonPop/balloon_yellow.png">
+	</div>
+
+	<script>
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+
+		var lastRender = 0
+		var maxFPS = 200; // The maximum FPS we want to allow
+
+		var balloons = [];
+
+		var imageSky = document.getElementById('sky');
+		var imagePow = document.getElementById('pow');
+		var balloonImages = [document.getElementById('balloonGreen'),
+		document.getElementById('balloonOrange'),
+		document.getElementById('balloonPurple'),
+		document.getElementById('balloonBlue'),
+		document.getElementById('balloonRed'),
+		document.getElementById('balloonYellow')];
+
+		var canvasWidth = 400;
+		var canvasHeigth = 600;
+		var balloonWidth = 110;
+		var balloonHeight = 240;
+		var baloonSpeed = 0;
+		var concurrentBaloons = 0.5;
+		var gameStarted = false;
+
+		function start_music() {
+			if (gameStarted) return;
+			gameStarted = true;
+			var audio = new Audio('BalloonPop/music.mp3');
+			audio.loop = true;
+			audio.volume = 0.5;
+			audio.play();
+		}
+
+		function draw_first() {
+			if (!gameStarted && balloons.length == 0) {
+				var newBalloon = new Balloon();
+				newBalloon.X = (canvasWidth - balloonWidth) / 2
+				newBalloon.Y = (canvasHeigth - balloonHeight) / 2
+				balloons.push(newBalloon);
+			}
+		}
+
+		var audioPop = new Audio('BalloonPop/balloon-pop.flac');
+
+		// main loop
+		function loop(timestamp) {
+			// Throttle the frame rate.    
+			if (timestamp < lastRender + (1000 / maxFPS)) {
+				window.requestAnimationFrame(loop);
+				return;
+			}
+
+			draw_first()
+			update()
+			draw()
+
+			lastRender = timestamp
+			window.requestAnimationFrame(loop)
+		}
+
+
+		function update() {
+			if (!gameStarted) return;
+			// randomly add balloons
+			if (Math.random() > 0.9 && balloons.length < concurrentBaloons) {
+				var newBalloon = new Balloon();
+				balloons.push(newBalloon);
+			}
+
+			// update balloons
+			balloons.forEach(function (b) {
+				b.updateMe();
+			});
+		}
+
+		function draw() {
+			drawBackground();
+
+			// draw balloons
+			balloons.forEach(function (b) {
+				b.drawMe();
+			});
+		}
+
+		function drawBackground() {
+			ctx.drawImage(imageSky, 0, 0, canvasWidth, canvasHeigth);
+		}
+
+		// class balloon
+		function Balloon() {
+			this.X = Math.floor(Math.random() * (canvasWidth - balloonWidth));
+			this.Y = canvasHeigth;
+			this.IsPop = false;
+			this.AfterPopCountDown = 25;
+			this.BalloonColorIndex = Math.floor(Math.random() * balloonImages.length);
+
+			// update balloon:
+			this.updateMe = function () {
+				this.Y -= baloonSpeed;
+				this.X += -0.5 + Math.random();
+
+				if (this.IsPop) {
+					this.Y += 3;
+					this.X += 1;
+					this.AfterPopCountDown -= 1;
+				}
+
+				if (this.Y < - balloonHeight || this.AfterPopCountDown < 0) {
+					// remove itself
+					baloonSpeed = Math.max(1, baloonSpeed / 1.05);
+					console.log("baloonSpeed: " + baloonSpeed + " , concurrent:" + concurrentBaloons);
+					balloons.splice(balloons.indexOf(this), 1);
+				}
+			}
+
+			// draw balloon:
+			this.drawMe = function () {
+				ctx.drawImage(balloonImages[this.BalloonColorIndex], this.X, this.Y, balloonWidth, balloonHeight);
+				if (this.IsPop) {
+					ctx.drawImage(imagePow, this.X - 50, this.Y - 20, 250, 183);
+				}
+			}
+		}
+
+		// Add event listener for `click` events.
+		c.addEventListener('mousedown', function (event) {
+			var x = event.pageX,
+				y = event.pageY;
+
+			balloons.forEach(function (balloon) {
+				if (y > balloon.Y && y < balloon.Y + balloonHeight && x > balloon.X && x < balloon.X + balloonWidth) {
+					balloon.IsPop = true;
+					var audioPop = new Audio('balloon-pop.flac');
+					audioPop.play();
+					baloonSpeed = Math.max(1, baloonSpeed * 1.05);
+					baloonSpeed = Math.min(baloonSpeed, 20); // speed upper limit
+					concurrentBaloons = Math.max(1, concurrentBaloons * 1.05);
+					concurrentBaloons = Math.min(concurrentBaloons, 200); // concurrent upped limit
+					console.log("baloonSpeed: " + baloonSpeed + " , concurrent:" + concurrentBaloons);
+					console.log("baloons: " + balloons.length);
+					start_music();
+				}
+			});
+		}, false);
+
+		window.requestAnimationFrame(loop)
+
+	</script>
+

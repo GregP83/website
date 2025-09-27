@@ -1,0 +1,57 @@
+<h2>Ardia Policy Management Service</h2>
+<div class="row">
+
+  <div class="col-md-12">
+    The Ardia cloud platform is a software solution designed for large laboratories. It's primarily cloud-based but can 
+    also be installed on powerful PCs stored on premises. It follows a micro-services architecture, providing essential 
+    functionalities for data storage, instrument control, data acquisition, processing, and visualization. Additionally, 
+    it ensures compliance by offering user management with roles and privileges, as well as audit logs to track user actions 
+    for auditing purposes. Ardia serves as a foundational platform, incorporating all the necessary components for various 
+    laboratory software products. This allows for easier development of new products in the future, as they can leverage the 
+    existing infrastructure and workflows provided by Ardia.
+    <hr style="border-color: black;">
+    
+    <img src="Img/go-gopher.svg" onclick="showImage(this)" class="hover-rectangle" style="width:20%; float: left" />
+    <img src="Img/ArdiaPolicy.png" onclick="showImage(this)" class="hover-rectangle" style="width:45%; float: right" />
+
+    Policy management is a service within Ardia. My team was tasked with taking over the 
+    previous implementation in C#. However, it came with the high complexity and maintenance burden of a large codebase, 
+    multiple unused endpoints, and unused tables in the database, among other issues. Since it heavily relies on a library 
+    written in GO, the opportunity arose to rewrite the entire service in GO to avoid compatibility issues encountered in C#. 
+    <br /><br />
+    Initially, my manager was unsure of the idea of rewriting the service in a language we had no experience in. I spent a 
+    week (including the weekend) preparing a working prototype and presented an MVP, ultimately getting the green light for 
+    the team to pursue that direction. It took us two months to utilize the GIN framework, add Identity validation (via gRPC) 
+    to the middle layer, integrate Audit support (via RabbitMQ), and versioned database migrations using GORM extensions. 
+    <br /><br />
+    The revamped project leveraged the existing database schema, omitting unused tables that were removed, and reimplemented 
+    existing endpoints. This approach aimed to minimize disruption to the current installations.
+    Service allows CRUD (create, read, update, delete) operations on 
+    policies and enforces (computes if the subject has access or not) the policies stored in the database. 
+    The new GO version of the service consumes only 20% of the memory compared to the previous implementation, and it has 
+    reduced the latency of large calls for enforcement endpoints by 50%, resulting in a twofold increase in performance.
+    <br /><br />
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    I was responsible for:
+    <ul>
+      <li>Researching and prototyping,</li>
+      <li>Leading the team members, assigning tasks, and supporting a team of 5 engineers and 2 testers whenever anyone got stuck,</li>
+      <li>Implementing the main workflows and data layer,</li>
+      <li>Ensuring that everything in the project was completed and tested.</li>
+    </ul>
+  </div>
+
+</div>
+    
+<br />
+<br />
+Ardia Platform official website:
+
+<a href="https://www.thermofisher.com/us/en/home/digital-solutions/ardia-platform.html"
+  target="_blank">https://www.thermofisher.com/us/en/home/digital-solutions/ardia-platform.html</a>
+
+<br />
+<br />

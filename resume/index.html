@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume — Greg Pankowski</title>
+<meta name="description" content="CV and professional certificates for Greg Pankowski.">
+<link rel="stylesheet" href="/css/site.css?v=68174429">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍂</text></svg>">
+</head>
+<body>
+
+<section class="hero">
+  <video id="backdrop" src="/leaves.mp4" poster="/poster.jpg"
+         autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+  <div class="scrim"></div>
+  <nav class="sitenav"><a href="/">Work</a>
+<a href="/about/">About</a>
+<a href="/resume/" class='active'>Resume</a>
+<a href="/fun/">Fun</a>
+<a href="/contact/">Contact</a></nav>
+  <div class="hero-copy">
+    <p class="kicker">Senior Software Developer</p>
+    <h1>Greg Pankowski</h1>
+    <div class="lead"><p>Fifteen years building software across trading platforms, laboratory instruments, hearing aids and laser automation — in Poland, the UK, Singapore and California. This is the work.</p></div>
+  </div>
+</section>
+<script>
+/* Honour prefers-reduced-motion, and start on a gesture where autoplay is
+   refused (LibreWolf and hardened Firefox profiles block it even when muted). */
+(() => {
+  const video = document.getElementById('backdrop');
+  if (!video) return;
+  const query = matchMedia('(prefers-reduced-motion: reduce)');
+  const gestures = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend', 'scroll'];
+  let armed = false;
+  const nudge = () => video.play().catch(() => {});
+  const waitForGesture = () => {
+    if (armed || query.matches) return;
+    armed = true;
+    document.body.classList.add('backdrop-waiting');
+    gestures.forEach(t => addEventListener(t, nudge, { passive: true, capture: true }));
+  };
+  const stopWaiting = () => {
+    document.body.classList.remove('backdrop-waiting');
+    if (!armed) return;
+    armed = false;
+    gestures.forEach(t => removeEventListener(t, nudge, { capture: true }));
+  };
+  video.addEventListener('playing', stopWaiting);
+  const apply = () => {
+    if (query.matches) { stopWaiting(); video.removeAttribute('autoplay'); video.pause(); video.currentTime = 0; }
+    else video.play().catch(waitForGesture);
+  };
+  apply();
+  query.addEventListener('change', apply);
+})();
+</script>
+
+
+<main class="wrap" id="content" tabindex="-1">
+<h2>Resume</h2>
+<ul><li><a href="/GregPankowski_CV_2025.pdf">CV — UK (PDF)</a></li><li>CV — US — <em>TODO: add the US version of the PDF and link it here.</em></li></ul>
+<div class="pdf">
+  <object data="/GregPankowski_CV_2025.pdf" type="application/pdf" aria-label="Greg Pankowski CV">
+    <p>This browser will not display the PDF inline —
+       <a href="/GregPankowski_CV_2025.pdf">open the CV as a PDF</a> instead.</p>
+  </object>
+</div>
+<p class="pdf-small">Inline PDFs are unreliable on phones —
+  <a href="/GregPankowski_CV_2025.pdf">open the CV as a PDF</a>.</p>
+<h2>Certificates</h2>
+<p><img class="shot" src="/img/PSD_I.jpg" alt="Professional SCRUM Developer I" loading="lazy" onclick="zoom(this)"></p>
+<p><img class="shot" src="/img/OCJA.jpg" alt="Oracle Certified Associate, Java SE 8 Programmer" loading="lazy" onclick="zoom(this)"></p>
+</main>
+
+<footer class="foot">
+  <p>Greg Pankowski · Senior Software Developer</p>
+  <p><a href="/">Work</a> · <a href="/about/">About</a> · <a href="/resume/">Resume</a> · <a href="/fun/">Fun</a> · <a href="/contact/">Contact</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""></div>
+
+
+<script>
+/* Click a screenshot to see it full size. Defined on the shell, so it survives
+   the content swaps below — the inline onclick in swapped-in markup still finds
+   it. */
+(() => {
+  const box = document.getElementById('lightbox');
+  const img = box.querySelector('img');
+  window.zoom = el => { img.src = el.currentSrc || el.src; box.hidden = false; };
+  const close = () => { box.hidden = true; img.removeAttribute('src'); };
+  box.addEventListener('click', close);
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+
+<script>
+/* Persistent shell navigation.
+
+   Every page here is a complete static document — this only enhances the
+   navigation between them. Following a link normally would tear down and
+   rebuild the <video>, which restarts the animation; instead we fetch the
+   target, swap the <main> contents, and leave the hero untouched.
+
+   This is deliberately NOT the old site's jQuery .load() approach. There the
+   fragments were the only copy of the content and nothing worked without
+   JavaScript. Here the real pages exist and are served whole; if this script
+   never runs, or a fetch fails, the browser just navigates as usual. */
+(() => {
+  if (!window.fetch || !window.history.pushState) return;
+
+  const main = document.getElementById('content');
+  const cache = new Map();
+
+  const samePage = url =>
+    url.pathname === location.pathname && url.search === location.search;
+
+  async function load(url) {
+    if (cache.has(url)) return cache.get(url);
+    const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+    if (!res.ok) throw new Error(res.status);
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    const next = doc.getElementById('content');
+    // A page without the shell (the standalone toys) must navigate normally.
+    if (!next) throw new Error('no shell');
+    const entry = {
+      html: next.innerHTML,
+      title: doc.title,
+      description: (doc.querySelector('meta[name=description]') || {}).content || '',
+    };
+    cache.set(url, entry);
+    return entry;
+  }
+
+  function apply(entry, url, { restoreScroll = false } = {}) {
+    // Only scroll if the hero has already been scrolled past — otherwise the
+    // reader is looking at the hero and the new content appears below it,
+    // which is the whole point of keeping the shell.
+    const hero = document.querySelector('.hero');
+    const heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
+    const wasPastHero = window.scrollY > heroBottom - 40;
+
+    main.innerHTML = entry.html;
+    document.title = entry.title;
+    const meta = document.querySelector('meta[name=description]');
+    if (meta) meta.content = entry.description;
+
+    const path = new URL(url, location.origin).pathname;
+    document.querySelectorAll('.sitenav a').forEach(a => {
+      const target = new URL(a.href).pathname;
+      // "/" is the work list, so it is active on the home page and on every
+      // project page beneath it — but not on /about/, /resume/ and friends.
+      a.classList.toggle('active',
+        target === '/' ? (path === '/' || path.startsWith('/work/'))
+                       : path.startsWith(target));
+    });
+
+    if (!restoreScroll && wasPastHero) {
+      window.scrollTo({ top: main.offsetTop - 12, behavior: 'instant' });
+    }
+    main.focus({ preventScroll: true });   // move focus for screen readers
+  }
+
+  addEventListener('click', async e => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey ||
+        e.shiftKey || e.altKey) return;
+    const link = e.target.closest('a');
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.hash && samePage(url)) return;          // in-page anchor
+    if (!url.pathname.endsWith('/')) return;        // files, not shell pages
+
+    e.preventDefault();
+    try {
+      const entry = await load(url.pathname);
+      history.pushState({}, '', url.pathname);
+      apply(entry, url.pathname);
+    } catch {
+      location.href = url.href;                     // any doubt: real navigation
+    }
+  });
+
+  addEventListener('popstate', async () => {
+    try {
+      apply(await load(location.pathname), location.pathname, { restoreScroll: true });
+    } catch {
+      location.reload();
+    }
+  });
+
+  // Warm the cache on hover, so a click feels instant.
+  addEventListener('pointerover', e => {
+    const link = e.target.closest && e.target.closest('a');
+    if (!link) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin === location.origin && url.pathname.endsWith('/')) {
+      load(url.pathname).catch(() => {});
+    }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

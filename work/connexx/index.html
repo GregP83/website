@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexx — Greg Pankowski</title>
+<meta name="description" content="Connexx at Siemens Medical Instruments.">
+<link rel="stylesheet" href="/css/site.css?v=68174429">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍂</text></svg>">
+</head>
+<body>
+
+<section class="hero">
+  <video id="backdrop" src="/leaves.mp4" poster="/poster.jpg"
+         autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+  <div class="scrim"></div>
+  <nav class="sitenav"><a href="/" class='active'>Work</a>
+<a href="/about/">About</a>
+<a href="/resume/">Resume</a>
+<a href="/fun/">Fun</a>
+<a href="/contact/">Contact</a></nav>
+  <div class="hero-copy">
+    <p class="kicker">Senior Software Developer</p>
+    <h1>Greg Pankowski</h1>
+    <div class="lead"><p>Fifteen years building software across trading platforms, laboratory instruments, hearing aids and laser automation — in Poland, the UK, Singapore and California. This is the work.</p></div>
+  </div>
+</section>
+<script>
+/* Honour prefers-reduced-motion, and start on a gesture where autoplay is
+   refused (LibreWolf and hardened Firefox profiles block it even when muted). */
+(() => {
+  const video = document.getElementById('backdrop');
+  if (!video) return;
+  const query = matchMedia('(prefers-reduced-motion: reduce)');
+  const gestures = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend', 'scroll'];
+  let armed = false;
+  const nudge = () => video.play().catch(() => {});
+  const waitForGesture = () => {
+    if (armed || query.matches) return;
+    armed = true;
+    document.body.classList.add('backdrop-waiting');
+    gestures.forEach(t => addEventListener(t, nudge, { passive: true, capture: true }));
+  };
+  const stopWaiting = () => {
+    document.body.classList.remove('backdrop-waiting');
+    if (!armed) return;
+    armed = false;
+    gestures.forEach(t => removeEventListener(t, nudge, { capture: true }));
+  };
+  video.addEventListener('playing', stopWaiting);
+  const apply = () => {
+    if (query.matches) { stopWaiting(); video.removeAttribute('autoplay'); video.pause(); video.currentTime = 0; }
+    else video.play().catch(waitForGesture);
+  };
+  apply();
+  query.addEventListener('change', apply);
+})();
+</script>
+
+
+<main class="wrap" id="content" tabindex="-1">
+<article class="project">
+  <p class="breadcrumb"><a href="/">Work</a> <span>/</span> Siemens Medical Instruments</p>
+  <h1>Connexx</h1>
+  <div class="meta"><span class="todo">period TODO</span><span class="tag">C#</span><span class="tag">C++</span><span class="tag">HTML</span></div>
+  <div class="figures"><figure><img src="/img/cxx1.jpg" alt="" loading="lazy" onclick="zoom(this)"></figure><figure><img src="/img/cxx3.jpg" alt="" loading="lazy" onclick="zoom(this)"></figure></div>
+  <div class="prose">
+<p>Connexx is a fitting and hearing aids programming software for Siemens hearing aids. It introduces the world-best BinaxFit and MiconFit fitting algorithms to provide the best hearing experience to Siemens customers. Currently Connexx is used by over 400&#x27;000 people worldwide (136&#x27;000 in the US).</p>
+<p>I was responsible mainly for a feature called Autofit: it measures the acoustic characteristics of the human ear (actually an audiologist puts 1 inch long pipe into your ear! - and as we cooperated closely with the audiologist team we were often used as test subjects :) and based on individual characteristics it calculates how a hearing instrument needs to be programmed to produce sound as close to natural as possible.</p>
+<p>With the team we designed the user interface and workflow from scratch. Feature requires cooperation with measuring hardware (produced by Siemens or third party companies) and programmer of the hearing instrument. Furthermore extended range of potential customers by adding 3 measurement devices (2 in C#, 1 in C++).</p>
+<p>My other contribution:</p>
+<ul><li>rendered technical support for risk analysis: prepared design documentation and implemented 2 high-risk features (infant warning and output to patient&#x27;s ear)</li><li>proposed vent size calculations for all supported fitting algorithms</li><li>removed lots of bugs and added tons of new unit tests to guard code quality.</li></ul>
+<p>Connexx official website: <a href="https://www.signia-pro.com/en-us/sales-tools/connexx/" target="_blank" rel="noopener">https://www.signia-pro.com/en-us/sales-tools/connexx/</a></p>
+<p>*Siemens Medical has spinned off its hearing devices business as SIVANTOS. Later merged with Widex creating <a href="https://en.wikipedia.org/wiki/WS_Audiology" target="_blank" rel="noopener">WS Audiology</a>.</p>
+  </div>
+  <a class="external" href="https://www.signia-pro.com/en-us/sales-tools/connexx/" target="_blank" rel="noopener">Official website ↗</a>
+</article>
+<nav class="pager"><a class="prev" href="/work/ics-6000-tablet-app/"><span>Previous</span><strong>ICS-6000 Tablet App</strong></a><a class="next" href="/work/uniqc/"><span>Next</span><strong>UniQC</strong></a></nav>
+
+</main>
+
+<footer class="foot">
+  <p>Greg Pankowski · Senior Software Developer</p>
+  <p><a href="/">Work</a> · <a href="/about/">About</a> · <a href="/resume/">Resume</a> · <a href="/fun/">Fun</a> · <a href="/contact/">Contact</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""></div>
+
+
+<script>
+/* Click a screenshot to see it full size. Defined on the shell, so it survives
+   the content swaps below — the inline onclick in swapped-in markup still finds
+   it. */
+(() => {
+  const box = document.getElementById('lightbox');
+  const img = box.querySelector('img');
+  window.zoom = el => { img.src = el.currentSrc || el.src; box.hidden = false; };
+  const close = () => { box.hidden = true; img.removeAttribute('src'); };
+  box.addEventListener('click', close);
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+
+<script>
+/* Persistent shell navigation.
+
+   Every page here is a complete static document — this only enhances the
+   navigation between them. Following a link normally would tear down and
+   rebuild the <video>, which restarts the animation; instead we fetch the
+   target, swap the <main> contents, and leave the hero untouched.
+
+   This is deliberately NOT the old site's jQuery .load() approach. There the
+   fragments were the only copy of the content and nothing worked without
+   JavaScript. Here the real pages exist and are served whole; if this script
+   never runs, or a fetch fails, the browser just navigates as usual. */
+(() => {
+  if (!window.fetch || !window.history.pushState) return;
+
+  const main = document.getElementById('content');
+  const cache = new Map();
+
+  const samePage = url =>
+    url.pathname === location.pathname && url.search === location.search;
+
+  async function load(url) {
+    if (cache.has(url)) return cache.get(url);
+    const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+    if (!res.ok) throw new Error(res.status);
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    const next = doc.getElementById('content');
+    // A page without the shell (the standalone toys) must navigate normally.
+    if (!next) throw new Error('no shell');
+    const entry = {
+      html: next.innerHTML,
+      title: doc.title,
+      description: (doc.querySelector('meta[name=description]') || {}).content || '',
+    };
+    cache.set(url, entry);
+    return entry;
+  }
+
+  function apply(entry, url, { restoreScroll = false } = {}) {
+    // Only scroll if the hero has already been scrolled past — otherwise the
+    // reader is looking at the hero and the new content appears below it,
+    // which is the whole point of keeping the shell.
+    const hero = document.querySelector('.hero');
+    const heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
+    const wasPastHero = window.scrollY > heroBottom - 40;
+
+    main.innerHTML = entry.html;
+    document.title = entry.title;
+    const meta = document.querySelector('meta[name=description]');
+    if (meta) meta.content = entry.description;
+
+    const path = new URL(url, location.origin).pathname;
+    document.querySelectorAll('.sitenav a').forEach(a => {
+      const target = new URL(a.href).pathname;
+      // "/" is the work list, so it is active on the home page and on every
+      // project page beneath it — but not on /about/, /resume/ and friends.
+      a.classList.toggle('active',
+        target === '/' ? (path === '/' || path.startsWith('/work/'))
+                       : path.startsWith(target));
+    });
+
+    if (!restoreScroll && wasPastHero) {
+      window.scrollTo({ top: main.offsetTop - 12, behavior: 'instant' });
+    }
+    main.focus({ preventScroll: true });   // move focus for screen readers
+  }
+
+  addEventListener('click', async e => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey ||
+        e.shiftKey || e.altKey) return;
+    const link = e.target.closest('a');
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.hash && samePage(url)) return;          // in-page anchor
+    if (!url.pathname.endsWith('/')) return;        // files, not shell pages
+
+    e.preventDefault();
+    try {
+      const entry = await load(url.pathname);
+      history.pushState({}, '', url.pathname);
+      apply(entry, url.pathname);
+    } catch {
+      location.href = url.href;                     // any doubt: real navigation
+    }
+  });
+
+  addEventListener('popstate', async () => {
+    try {
+      apply(await load(location.pathname), location.pathname, { restoreScroll: true });
+    } catch {
+      location.reload();
+    }
+  });
+
+  // Warm the cache on hover, so a click feels instant.
+  addEventListener('pointerover', e => {
+    const link = e.target.closest && e.target.closest('a');
+    if (!link) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin === location.origin && url.pathname.endsWith('/')) {
+      load(url.pathname).catch(() => {});
+    }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

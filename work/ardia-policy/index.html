@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ardia Policy Management Service — Greg Pankowski</title>
+<meta name="description" content="Ardia Policy Management Service at Thermo Fisher Scientific.">
+<link rel="stylesheet" href="/css/site.css?v=68174429">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍂</text></svg>">
+</head>
+<body>
+
+<section class="hero">
+  <video id="backdrop" src="/leaves.mp4" poster="/poster.jpg"
+         autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+  <div class="scrim"></div>
+  <nav class="sitenav"><a href="/" class='active'>Work</a>
+<a href="/about/">About</a>
+<a href="/resume/">Resume</a>
+<a href="/fun/">Fun</a>
+<a href="/contact/">Contact</a></nav>
+  <div class="hero-copy">
+    <p class="kicker">Senior Software Developer</p>
+    <h1>Greg Pankowski</h1>
+    <div class="lead"><p>Fifteen years building software across trading platforms, laboratory instruments, hearing aids and laser automation — in Poland, the UK, Singapore and California. This is the work.</p></div>
+  </div>
+</section>
+<script>
+/* Honour prefers-reduced-motion, and start on a gesture where autoplay is
+   refused (LibreWolf and hardened Firefox profiles block it even when muted). */
+(() => {
+  const video = document.getElementById('backdrop');
+  if (!video) return;
+  const query = matchMedia('(prefers-reduced-motion: reduce)');
+  const gestures = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend', 'scroll'];
+  let armed = false;
+  const nudge = () => video.play().catch(() => {});
+  const waitForGesture = () => {
+    if (armed || query.matches) return;
+    armed = true;
+    document.body.classList.add('backdrop-waiting');
+    gestures.forEach(t => addEventListener(t, nudge, { passive: true, capture: true }));
+  };
+  const stopWaiting = () => {
+    document.body.classList.remove('backdrop-waiting');
+    if (!armed) return;
+    armed = false;
+    gestures.forEach(t => removeEventListener(t, nudge, { capture: true }));
+  };
+  video.addEventListener('playing', stopWaiting);
+  const apply = () => {
+    if (query.matches) { stopWaiting(); video.removeAttribute('autoplay'); video.pause(); video.currentTime = 0; }
+    else video.play().catch(waitForGesture);
+  };
+  apply();
+  query.addEventListener('change', apply);
+})();
+</script>
+
+
+<main class="wrap" id="content" tabindex="-1">
+<article class="project">
+  <p class="breadcrumb"><a href="/">Work</a> <span>/</span> Thermo Fisher Scientific</p>
+  <h1>Ardia Policy Management Service</h1>
+  <div class="meta"><span class="todo">period TODO</span><span class="tag">Go</span><span class="tag">Gin</span><span class="tag">Casbin</span><span class="tag">gRPC</span><span class="tag">GORM</span><span class="tag">RabbitMQ</span></div>
+  <div class="figures"><figure><img src="/img/go-gopher.svg" alt="" loading="lazy" onclick="zoom(this)"></figure><figure><img src="/img/ArdiaPolicy.png" alt="" loading="lazy" onclick="zoom(this)"></figure></div>
+  <div class="prose">
+<p>The Ardia cloud platform is a software solution designed for large laboratories. It&#x27;s primarily cloud-based but can also be installed on powerful PCs stored on premises. It follows a micro-services architecture, providing essential functionalities for data storage, instrument control, data acquisition, processing, and visualization. Additionally, it ensures compliance by offering user management with roles and privileges, as well as audit logs to track user actions for auditing purposes. Ardia serves as a foundational platform, incorporating all the necessary components for various laboratory software products. This allows for easier development of new products in the future, as they can leverage the existing infrastructure and workflows provided by Ardia.</p>
+<p>Policy management is a service within Ardia. My team was tasked with taking over the previous implementation in C#. However, it came with the high complexity and maintenance burden of a large codebase, multiple unused endpoints, and unused tables in the database, among other issues. Since it heavily relies on a library written in GO, the opportunity arose to rewrite the entire service in GO to avoid compatibility issues encountered in C#.</p>
+<p>Initially, my manager was unsure of the idea of rewriting the service in a language we had no experience in. I spent a week (including the weekend) preparing a working prototype and presented an MVP, ultimately getting the green light for the team to pursue that direction. It took us two months to utilize the GIN framework, add Identity validation (via gRPC) to the middle layer, integrate Audit support (via RabbitMQ), and versioned database migrations using GORM extensions.</p>
+<p>The revamped project leveraged the existing database schema, omitting unused tables that were removed, and reimplemented existing endpoints. This approach aimed to minimize disruption to the current installations. Service allows CRUD (create, read, update, delete) operations on policies and enforces (computes if the subject has access or not) the policies stored in the database. The new GO version of the service consumes only 20% of the memory compared to the previous implementation, and it has reduced the latency of large calls for enforcement endpoints by 50%, resulting in a twofold increase in performance.</p>
+<p>I was responsible for:</p>
+<ul><li>Researching and prototyping</li><li>Leading the team members, assigning tasks, and supporting a team of 5 engineers and 2 testers whenever anyone got stuck</li><li>Implementing the main workflows and data layer</li><li>Ensuring that everything in the project was completed and tested.</li></ul>
+  </div>
+  <a class="external" href="https://www.thermofisher.com/us/en/home/digital-solutions/ardia-platform.html" target="_blank" rel="noopener">Official website ↗</a>
+</article>
+<nav class="pager"><a class="prev" href="/work/joule/"><span>Previous</span><strong>Joule Trading Platform</strong></a><a class="next" href="/work/ardia-audit/"><span>Next</span><strong>Audit service on Ardia Platform</strong></a></nav>
+
+</main>
+
+<footer class="foot">
+  <p>Greg Pankowski · Senior Software Developer</p>
+  <p><a href="/">Work</a> · <a href="/about/">About</a> · <a href="/resume/">Resume</a> · <a href="/fun/">Fun</a> · <a href="/contact/">Contact</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""></div>
+
+
+<script>
+/* Click a screenshot to see it full size. Defined on the shell, so it survives
+   the content swaps below — the inline onclick in swapped-in markup still finds
+   it. */
+(() => {
+  const box = document.getElementById('lightbox');
+  const img = box.querySelector('img');
+  window.zoom = el => { img.src = el.currentSrc || el.src; box.hidden = false; };
+  const close = () => { box.hidden = true; img.removeAttribute('src'); };
+  box.addEventListener('click', close);
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+
+<script>
+/* Persistent shell navigation.
+
+   Every page here is a complete static document — this only enhances the
+   navigation between them. Following a link normally would tear down and
+   rebuild the <video>, which restarts the animation; instead we fetch the
+   target, swap the <main> contents, and leave the hero untouched.
+
+   This is deliberately NOT the old site's jQuery .load() approach. There the
+   fragments were the only copy of the content and nothing worked without
+   JavaScript. Here the real pages exist and are served whole; if this script
+   never runs, or a fetch fails, the browser just navigates as usual. */
+(() => {
+  if (!window.fetch || !window.history.pushState) return;
+
+  const main = document.getElementById('content');
+  const cache = new Map();
+
+  const samePage = url =>
+    url.pathname === location.pathname && url.search === location.search;
+
+  async function load(url) {
+    if (cache.has(url)) return cache.get(url);
+    const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+    if (!res.ok) throw new Error(res.status);
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    const next = doc.getElementById('content');
+    // A page without the shell (the standalone toys) must navigate normally.
+    if (!next) throw new Error('no shell');
+    const entry = {
+      html: next.innerHTML,
+      title: doc.title,
+      description: (doc.querySelector('meta[name=description]') || {}).content || '',
+    };
+    cache.set(url, entry);
+    return entry;
+  }
+
+  function apply(entry, url, { restoreScroll = false } = {}) {
+    // Only scroll if the hero has already been scrolled past — otherwise the
+    // reader is looking at the hero and the new content appears below it,
+    // which is the whole point of keeping the shell.
+    const hero = document.querySelector('.hero');
+    const heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
+    const wasPastHero = window.scrollY > heroBottom - 40;
+
+    main.innerHTML = entry.html;
+    document.title = entry.title;
+    const meta = document.querySelector('meta[name=description]');
+    if (meta) meta.content = entry.description;
+
+    const path = new URL(url, location.origin).pathname;
+    document.querySelectorAll('.sitenav a').forEach(a => {
+      const target = new URL(a.href).pathname;
+      // "/" is the work list, so it is active on the home page and on every
+      // project page beneath it — but not on /about/, /resume/ and friends.
+      a.classList.toggle('active',
+        target === '/' ? (path === '/' || path.startsWith('/work/'))
+                       : path.startsWith(target));
+    });
+
+    if (!restoreScroll && wasPastHero) {
+      window.scrollTo({ top: main.offsetTop - 12, behavior: 'instant' });
+    }
+    main.focus({ preventScroll: true });   // move focus for screen readers
+  }
+
+  addEventListener('click', async e => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey ||
+        e.shiftKey || e.altKey) return;
+    const link = e.target.closest('a');
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.hash && samePage(url)) return;          // in-page anchor
+    if (!url.pathname.endsWith('/')) return;        // files, not shell pages
+
+    e.preventDefault();
+    try {
+      const entry = await load(url.pathname);
+      history.pushState({}, '', url.pathname);
+      apply(entry, url.pathname);
+    } catch {
+      location.href = url.href;                     // any doubt: real navigation
+    }
+  });
+
+  addEventListener('popstate', async () => {
+    try {
+      apply(await load(location.pathname), location.pathname, { restoreScroll: true });
+    } catch {
+      location.reload();
+    }
+  });
+
+  // Warm the cache on hover, so a click feels instant.
+  addEventListener('pointerover', e => {
+    const link = e.target.closest && e.target.closest('a');
+    if (!link) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin === location.origin && url.pathname.endsWith('/')) {
+      load(url.pathname).catch(() => {});
+    }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

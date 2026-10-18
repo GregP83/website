@@ -1,0 +1,246 @@
+<html>
+<script type="text/javascript">
+var canvas, ctx, 
+    drawFlag = false,
+    prevX = 0, prevY = 0,
+    currX = 0, currY = 0,
+    timeout = 100,
+    won = false,
+    level = 1;
+
+var strokeStyle = "rgb(5,5,5)",
+    lineWidth = 5;
+
+function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext("2d");
+    cWidth = canvas.width;
+    cHeight = canvas.height;
+	
+    // setup events:
+    canvas.addEventListener("mousemove", function (e) { findxy('move', e) }, false);
+    canvas.addEventListener("mousedown", function (e) { findxy('down', e) }, false);
+    canvas.addEventListener("mouseup", function (e) { findxy('up', e) }, false);
+    canvas.addEventListener("mouseout", function (e) { findxy('out', e) }, false);
+
+    drawBackground();
+	
+    // start loop
+    step();
+}
+
+
+function step() {
+    if (won){
+    	drawWin();
+    }
+    else {
+    	if (timeout > 0)
+    	{
+    	    drawBackground();
+	    setTimeout('step()', 50);
+    	    timeout = timeout - 1;
+    	}
+    	else
+    	{
+	    drawLose();
+    	}
+    }
+}
+
+
+
+function drawBackground() {
+    drawObstacles();
+    drawCircles();
+    drawBorder();
+    drawLevel();
+    
+}
+
+function drawCircles() {
+    // TOP CIRCLE
+    ctx.beginPath();
+    ctx.arc(cWidth / 2, cHeight - 50, 35, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "rgb(0,255,0)";
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgb(0,51,0)";
+    ctx.stroke();
+
+    // BOTTOM CIRCLE
+    ctx.beginPath();
+    ctx.arc(cWidth / 2, 50, 35, 0, 2 * Math.PI, false);
+    if (won == false)
+	ctx.fillStyle = "rgb(0,0,255)";
+    else
+	ctx.fillStyle = "rgb(0,255,0)"
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgb(0,51,0)";
+    ctx.stroke();
+}
+
+function drawBorder(){
+    //BLACK BORDER 
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(0,cHeight);
+    ctx.lineTo(cWidth,cHeight);
+    ctx.lineTo(cWidth,0);
+    ctx.lineTo(0,0);	
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+	
+    //RED BORDER (timeout)
+    ctx.beginPath();
+    ctx.moveTo(0,(cHeight/100)*timeout);
+    ctx.lineTo(0,cHeight);
+    ctx.lineTo(cWidth,cHeight);
+    ctx.lineTo(cWidth,(cHeight/100)*timeout);	
+    ctx.strokeStyle = 'red';
+    ctx.stroke();
+}
+
+function drawLine() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    
+    ctx.closePath();
+    ctx.stroke();
+	
+    drawBackground();
+}
+
+function drawLevel(){
+    ctx.font="20px Verdana";
+    ctx.fillStyle = "rgb(210,210,210)";
+    ctx.fillText("Level: ",10,24);
+    ctx.fillText(level,70,24);
+    ctx.stroke();
+}
+
+function drawObstacles() {
+    var obstacles = [0, 0, 0, 0,
+		     5, 4, 5, 6,
+		     1, 5, 2, 5,
+		     6, 5, 7, 5]
+    
+    for (i = 0; i < level; i++) {
+	var x1 = obstacles[4*i];
+	var y1 = obstacles[4*i + 1];
+	var x2 = obstacles[4*i + 2];
+	var y2 = obstacles[4*i + 3];
+	x1 = cWidth / 9 * x1;
+	x2 = cWidth / 9 * x2;
+	y1 = cWidth / 9 * y1;
+	y2 = cWidth / 9 * y2;
+		
+	ctx.beginPath();
+	ctx.moveTo(x1,y1);
+	ctx.lineTo(x2,y2);	
+	ctx.strokeStyle = strokeStyle;
+	ctx.stroke();
+	
+	if (i * 4 + 4 == obstacles.length) {
+	    i = level;
+	}
+    }
+}
+
+function drawWin(){
+    ctx.font="50px Verdana";
+    ctx.fillStyle = "rgb(0,255,0)";
+    ctx.fillText("You Win!",cWidth/2-100,cHeight/2+10);
+    ctx.stroke();
+}
+
+function drawLose(){
+    ctx.font="50px Verdana";
+    ctx.fillStyle = 'red';
+    ctx.fillText("You Lost!",cWidth/2-100,cHeight/2+10);
+    ctx.stroke();
+}
+
+function findxy(res, e) {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+
+    	checkColorForStart();
+	
+	if (won) {
+	    nextLevel();
+	} else if (timeout == 0) {
+	    resetGame();
+	}
+    }
+    
+    if(won || timeout == 0)
+    	return;
+    
+    if (res == 'up' || res == "out") {
+    	drawFlag = false;
+    	ctx.clearRect(0, 0, cWidth, cHeight);
+    	drawBackground();
+    }
+    if (res == 'move' && drawFlag) {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+		
+	drawObstacles();
+	checkIfLose();
+    	checkIfWon();
+        drawLine();
+    }
+}
+
+function checkColorForStart(){
+    var p = ctx.getImageData(currX, currY, 1, 1).data; 
+    if (p[1] == 255) 
+    	drawFlag = true;
+    else 
+    	drawFlag = false;
+}
+
+function checkIfLose(){
+    var p = ctx.getImageData(currX, currY, 1, 1).data; 
+    if (p[0] == 5 && p[1]==5 && p[2] == 5) {
+    	drawFlag = false;
+    	ctx.clearRect(0, 0, cWidth, cHeight);
+    	drawBackground();
+    }
+}
+
+function checkIfWon(){
+    var p = ctx.getImageData(currX, currY, 1, 1).data; 
+    if (p[2] == 255) {
+    	drawFlag = false;
+    	won = true;
+    }
+}
+
+function nextLevel() {
+    level = level +1;
+    resetGame();
+}
+
+function resetGame() {
+    won = false;
+    timeout = 100;
+    step();
+}
+
+</script>
+<body onload="init()">
+    <canvas id="can" width="400" height="400" style="position:absolute;top:0;left:0;border:0px solid;"/>
+   <!-- <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:55%;left:15%;"> -->
+</body>
+</html>

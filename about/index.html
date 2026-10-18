@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Greg Pankowski</title>
+<meta name="description" content="How Greg Pankowski got from a Commodore 64 in northern Poland to trading platforms in London.">
+<link rel="stylesheet" href="/css/site.css?v=68174429">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍂</text></svg>">
+</head>
+<body>
+
+<section class="hero">
+  <video id="backdrop" src="/leaves.mp4" poster="/poster.jpg"
+         autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+  <div class="scrim"></div>
+  <nav class="sitenav"><a href="/">Work</a>
+<a href="/about/" class='active'>About</a>
+<a href="/resume/">Resume</a>
+<a href="/fun/">Fun</a>
+<a href="/contact/">Contact</a></nav>
+  <div class="hero-copy">
+    <p class="kicker">Senior Software Developer</p>
+    <h1>Greg Pankowski</h1>
+    <div class="lead"><p>Fifteen years building software across trading platforms, laboratory instruments, hearing aids and laser automation — in Poland, the UK, Singapore and California. This is the work.</p></div>
+  </div>
+</section>
+<script>
+/* Honour prefers-reduced-motion, and start on a gesture where autoplay is
+   refused (LibreWolf and hardened Firefox profiles block it even when muted). */
+(() => {
+  const video = document.getElementById('backdrop');
+  if (!video) return;
+  const query = matchMedia('(prefers-reduced-motion: reduce)');
+  const gestures = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend', 'scroll'];
+  let armed = false;
+  const nudge = () => video.play().catch(() => {});
+  const waitForGesture = () => {
+    if (armed || query.matches) return;
+    armed = true;
+    document.body.classList.add('backdrop-waiting');
+    gestures.forEach(t => addEventListener(t, nudge, { passive: true, capture: true }));
+  };
+  const stopWaiting = () => {
+    document.body.classList.remove('backdrop-waiting');
+    if (!armed) return;
+    armed = false;
+    gestures.forEach(t => removeEventListener(t, nudge, { capture: true }));
+  };
+  video.addEventListener('playing', stopWaiting);
+  const apply = () => {
+    if (query.matches) { stopWaiting(); video.removeAttribute('autoplay'); video.pause(); video.currentTime = 0; }
+    else video.play().catch(waitForGesture);
+  };
+  apply();
+  query.addEventListener('change', apply);
+})();
+</script>
+
+
+<main class="wrap" id="content" tabindex="-1">
+<h2>About</h2>
+<p>I was born in Koszalin, a city in the north of Poland, and got my first computer at nine — a Commodore 64 with a cassette recorder and two joysticks. After a few years of heavy gaming I started to get interested in programming, and the C64 obliged with its built-in BASIC interpreter.</p>
+<p>I remember spending three hours coding an animation of an asterisk twisting like a snake, every step hard-coded. I finished it, showed it to my cousin, and he said: <em>&quot;and that&#x27;s all? for this you have spent so much time?&quot;</em> — yes, and totally worth it. My most advanced project was a flying sprite and an electronic notebook that could save a note to tape and load it back another day. I dreamt about a computer with a hard disk, so my notebook would be that much more useful.</p>
+<p>Then high school, with LOGO — the one with the turtle — and Turbo Pascal, and Windows programming in Delphi in my free time.</p>
+<h2>University</h2>
+<p>I took Computer Science at the university in my home town and learned a lot: algorithms and data structures, C++ and Java, low-level languages like assembly for the Motorola 68000, Verilog and VHDL for designing hardware, and even CLIPS, NASA&#x27;s expert-system language, in my AI classes.</p>
+<p>I sold my C64, bought a Linux magazine with a Red Hat installer on the cover CD — back before it became the enterprise distribution — and tried to work out what it was all about. My sound and network cards were unsupported and my video card ran on minimal VESA settings, but I managed to recompile the kernel from source and boot a custom build that fixed the sound.</p>
+<h2>London, the first time</h2>
+<p>My fourth year was a bit special: I applied for a Socrates Erasmus exchange scholarship, got in, and spent a year at Brunel University in West London. On the bus to Berlin airport, just after leaving my town, I had a strange thought — that we are only worth what our skills and knowledge are, plus whatever we can pack in a backpack. I think that is true, in a war or a natural disaster at least.</p>
+<p>At Brunel I took a mobile phone development course, which my own university did not offer. The exchange delayed my final-year project by six months, but the university let me continue into the Masters programme anyway.</p>
+<p>I loved London. After the academic year finished in May I looked for work and started as a network administrator at Brand Distribution and Development, hired to set up three Windows 2003 file servers with replication. After that, a colleague who studied design and I redesigned the company website and I built and deployed it.</p>
+<p>Then back to Poland to finish my Masters thesis: a mobile application written in Java ME. One of the most beautiful designs I have ever done, thanks to J2ME Polish, a German library that let you style the UI with CSS files. The timetable and the maps I drew myself on canvas, pixel by pixel.</p>
+<h2>Singapore</h2>
+<p>I graduated into the financial crisis. Back in London the only job I could find was working as a chef in a kitchen. My Brunel-time sweetheart had graduated at the same time and decided to go back to Singapore, so I followed for ninety days — as long as the visa and my funds allowed. Either I found a job there, or I went back to Poland with a good adventure and no money.</p>
+<p>I got an interview six days before my flight home and my visa expiring. I explained my situation to the owner of the company and had an offer the next day. I stayed, and worked at Hypertronics for four years.</p>
+<p>I learned C# there in a week, coming from C++ and Java, and enjoyed it like a kid — watching my software drive motors and pneumatics, pushing hardware to its limits. Designing speed curves for motor stages to move in the shortest time with the least vibration on stopping. Multi-threaded operations across machine elements, movements synchronised to shorten an automated process. Most of my projects there I built alone, as the only software engineer on a cross-functional machine team. Hypertronics was a genuinely entrepreneurial company, with all the advantages and consequences that implies.</p>
+<p>After Coherent acquired us I tried a spell as a project engineer — interesting and demanding, but I missed the craft, and the chance to make things other people enjoy using. The new management was not interested in keeping the R&amp;D department, so I moved on: somewhere big, with proper software processes.</p>
+<h2>Siemens</h2>
+<p>There is no more process-strict environment than medical development. With FDA audits, everything has to be executed and scrupulously documented, exactly to the established process. People from software companies are often surprised how mature our development was: Scrum, pair programming, heavy Test Driven Development, requirements engineers acting as product owners, continuous integration with gated check-ins, compulsory code review, smoke tests on every main branch, automated acceptance tests, and a change control board.</p>
+<p>I picked up WPF with MVVM, dependency injection, a good deal of the Gang of Four patterns, unit testing with NUnit and RhinoMock, LINQ, reflection for testing legacy code, threading with locks and semaphores, managed C++ living alongside C#, architecture in UML, and aspect-oriented programming for boilerplate. Most importantly I learned to work in a team — the software group was over a hundred engineers across three locations.</p>
+<p>Then something unlikely happened: my family won a US green card in the diversity visa lottery, and we relocated.</p>
+<h2>Beyond work</h2>
+<p>In my spare time I play with a Raspberry Pi. Work is mostly C# on Windows, so on the Pi I get to use Python on Linux, drive some IO, light up an LED, and run a personal file, web and database server. I also like writing applications for my Android phone.</p>
+</main>
+
+<footer class="foot">
+  <p>Greg Pankowski · Senior Software Developer</p>
+  <p><a href="/">Work</a> · <a href="/about/">About</a> · <a href="/resume/">Resume</a> · <a href="/fun/">Fun</a> · <a href="/contact/">Contact</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""></div>
+
+
+<script>
+/* Click a screenshot to see it full size. Defined on the shell, so it survives
+   the content swaps below — the inline onclick in swapped-in markup still finds
+   it. */
+(() => {
+  const box = document.getElementById('lightbox');
+  const img = box.querySelector('img');
+  window.zoom = el => { img.src = el.currentSrc || el.src; box.hidden = false; };
+  const close = () => { box.hidden = true; img.removeAttribute('src'); };
+  box.addEventListener('click', close);
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+
+<script>
+/* Persistent shell navigation.
+
+   Every page here is a complete static document — this only enhances the
+   navigation between them. Following a link normally would tear down and
+   rebuild the <video>, which restarts the animation; instead we fetch the
+   target, swap the <main> contents, and leave the hero untouched.
+
+   This is deliberately NOT the old site's jQuery .load() approach. There the
+   fragments were the only copy of the content and nothing worked without
+   JavaScript. Here the real pages exist and are served whole; if this script
+   never runs, or a fetch fails, the browser just navigates as usual. */
+(() => {
+  if (!window.fetch || !window.history.pushState) return;
+
+  const main = document.getElementById('content');
+  const cache = new Map();
+
+  const samePage = url =>
+    url.pathname === location.pathname && url.search === location.search;
+
+  async function load(url) {
+    if (cache.has(url)) return cache.get(url);
+    const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+    if (!res.ok) throw new Error(res.status);
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    const next = doc.getElementById('content');
+    // A page without the shell (the standalone toys) must navigate normally.
+    if (!next) throw new Error('no shell');
+    const entry = {
+      html: next.innerHTML,
+      title: doc.title,
+      description: (doc.querySelector('meta[name=description]') || {}).content || '',
+    };
+    cache.set(url, entry);
+    return entry;
+  }
+
+  function apply(entry, url, { restoreScroll = false } = {}) {
+    // Only scroll if the hero has already been scrolled past — otherwise the
+    // reader is looking at the hero and the new content appears below it,
+    // which is the whole point of keeping the shell.
+    const hero = document.querySelector('.hero');
+    const heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
+    const wasPastHero = window.scrollY > heroBottom - 40;
+
+    main.innerHTML = entry.html;
+    document.title = entry.title;
+    const meta = document.querySelector('meta[name=description]');
+    if (meta) meta.content = entry.description;
+
+    const path = new URL(url, location.origin).pathname;
+    document.querySelectorAll('.sitenav a').forEach(a => {
+      const target = new URL(a.href).pathname;
+      // "/" is the work list, so it is active on the home page and on every
+      // project page beneath it — but not on /about/, /resume/ and friends.
+      a.classList.toggle('active',
+        target === '/' ? (path === '/' || path.startsWith('/work/'))
+                       : path.startsWith(target));
+    });
+
+    if (!restoreScroll && wasPastHero) {
+      window.scrollTo({ top: main.offsetTop - 12, behavior: 'instant' });
+    }
+    main.focus({ preventScroll: true });   // move focus for screen readers
+  }
+
+  addEventListener('click', async e => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey ||
+        e.shiftKey || e.altKey) return;
+    const link = e.target.closest('a');
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.hash && samePage(url)) return;          // in-page anchor
+    if (!url.pathname.endsWith('/')) return;        // files, not shell pages
+
+    e.preventDefault();
+    try {
+      const entry = await load(url.pathname);
+      history.pushState({}, '', url.pathname);
+      apply(entry, url.pathname);
+    } catch {
+      location.href = url.href;                     // any doubt: real navigation
+    }
+  });
+
+  addEventListener('popstate', async () => {
+    try {
+      apply(await load(location.pathname), location.pathname, { restoreScroll: true });
+    } catch {
+      location.reload();
+    }
+  });
+
+  // Warm the cache on hover, so a click feels instant.
+  addEventListener('pointerover', e => {
+    const link = e.target.closest && e.target.closest('a');
+    if (!link) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin === location.origin && url.pathname.endsWith('/')) {
+      load(url.pathname).catch(() => {});
+    }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

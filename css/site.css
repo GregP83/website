@@ -1,0 +1,535 @@
+/* gpankowski.com — built from the leaf-hero design.
+   Cream ground, burnt-sienna ink, serif display, monospace accents. */
+
+:root {
+  /* Ground is held as raw channels so the scrim and translucent chrome can
+     take it at varying alpha without restating the colour. */
+  --ground-rgb: 244 237 226;
+  --ink-rgb:    168 74 38;
+  --ground: rgb(var(--ground-rgb));
+  --ink:    rgb(var(--ink-rgb));
+  --type:   #3a2417;
+  --muted:  #7b5b45;
+  --line:   rgb(58 36 23 / 0.14);
+  --card:   #fbf6ee;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --col: 46rem;          /* reading column */
+  --wide: 72rem;         /* page container */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--type);
+  font-family: var(--serif);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--ink); }
+
+img { max-width: 100%; height: auto; }
+
+/* ── nav ────────────────────────────────────────────────────────────────── */
+/* Floats in the bottom-right corner of the animation. The artwork is brightest
+   and busiest on that side, so every item carries its own translucent ground
+   rather than relying on the scrim, which is nearly clear over there. */
+.sitenav {
+  position: absolute;
+  right: clamp(0.85rem, 3vw, 2.5rem);
+  bottom: clamp(0.85rem, 3vh, 2rem);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sitenav a {
+  padding: 0.55em 1.05em;
+  border: 1px solid rgb(var(--ink-rgb) / 0.16);
+  border-radius: 999px;
+  background: rgb(var(--ground-rgb) / 0.78);
+  backdrop-filter: blur(8px) saturate(1.15);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--type);
+  white-space: nowrap;
+  box-shadow: 0 2px 10px -6px rgb(58 36 23 / 0.5);
+  transition: color 0.2s ease, background-color 0.2s ease,
+              border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* Settle in after the artwork, one after another. */
+  animation: nav-in 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+.sitenav a:nth-child(1) { animation-delay: 0.28s; }
+.sitenav a:nth-child(2) { animation-delay: 0.36s; }
+.sitenav a:nth-child(3) { animation-delay: 0.44s; }
+.sitenav a:nth-child(4) { animation-delay: 0.52s; }
+.sitenav a:nth-child(5) { animation-delay: 0.60s; }
+
+@keyframes nav-in {
+  from { opacity: 0; transform: translateY(0.6rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+.sitenav a:hover,
+.sitenav a:focus-visible {
+  color: var(--ink);
+  background: rgb(var(--ground-rgb) / 0.95);
+  border-color: rgb(var(--ink-rgb) / 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -8px rgb(58 36 23 / 0.6);
+}
+
+.sitenav a.active {
+  color: var(--ground);
+  background: rgb(var(--ink-rgb) / 0.94);
+  border-color: rgb(var(--ink-rgb) / 0.94);
+}
+
+.sitenav a.active:hover {
+  background: color-mix(in srgb, var(--ink) 88%, #000);
+  border-color: color-mix(in srgb, var(--ink) 88%, #000);
+  color: var(--ground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sitenav a { animation: none; }
+}
+
+/* ── hero ────────────────────────────────────────────────────────────────── */
+/* The hero is permanent chrome: it sits above every page and is never
+   re-created, so the video keeps playing across navigation. Its height is a
+   compromise — tall enough to be a banner, short enough that the content
+   below it is visible without scrolling on a laptop. Raise it if you want the
+   animation to dominate the landing view. */
+.hero {
+  position: relative;
+  min-height: min(64svh, 36rem);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+}
+
+.hero video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 10% 60%;
+  background: var(--ground);
+}
+
+/* Legibility over artwork, approach 1: a directional scrim, heaviest on the
+   side carrying the type. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(100deg,
+      rgb(var(--ground-rgb) / 0.88) 0%,
+      rgb(var(--ground-rgb) / 0.74) 26%,
+      rgb(var(--ground-rgb) / 0.38) 48%,
+      rgb(var(--ground-rgb) / 0.06) 70%,
+      rgb(var(--ground-rgb) / 0.00) 100%),
+    linear-gradient(to top,
+      rgb(var(--ground-rgb) / 0.75) 0%,
+      rgb(var(--ground-rgb) / 0.18) 22%,
+      rgb(var(--ground-rgb) / 0.00) 46%);
+}
+
+.hero-copy {
+  position: relative;
+  max-width: var(--col);
+  padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 3rem) clamp(2.5rem, 7vh, 5rem);
+}
+
+/* Legibility, approach 2: multiply, so the artwork shows through the
+   letterforms instead of the type punching a hole in it. Light ground only. */
+.hero-copy h1,
+.hero-copy .kicker,
+.hero-copy .lead p { mix-blend-mode: multiply; }
+
+.kicker {
+  margin: 0 0 clamp(0.8rem, 2vh, 1.4rem);
+  font-family: var(--mono);
+  font-size: clamp(0.64rem, 1vw, 0.75rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.022em;
+}
+
+.lead p {
+  max-width: 34rem;
+  margin: clamp(1rem, 3vh, 1.6rem) 0 0;
+  font-size: clamp(1.02rem, 1.2vw, 1.2rem);
+  color: var(--muted);
+}
+
+/* Shown only when the browser refuses to autoplay and is waiting for a
+   gesture — otherwise a blocked video reads as a broken page. */
+.hero::after {
+  content: "Click to play";
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  top: clamp(1rem, 3vh, 2rem);        /* the nav owns the bottom-right corner */
+  padding: 0.5em 1em;
+  border-radius: 999px;
+  background: rgb(var(--ground-rgb) / 0.8);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+body.backdrop-waiting .hero::after { opacity: 1; visibility: visible; }
+
+/* ── layout ──────────────────────────────────────────────────────────────── */
+/* Focused programmatically after a content swap, for screen readers — the
+   outline would otherwise appear on every navigation. */
+.wrap:focus { outline: none; }
+
+.wrap {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 3rem) 4rem;
+  min-height: 60svh;        /* short pages should not leave the footer floating */
+}
+
+h1, h2, h3 { font-weight: 400; letter-spacing: -0.015em; line-height: 1.15; }
+
+.wrap > h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  margin: 0 0 2.5rem;
+}
+
+/* ── employer groups ─────────────────────────────────────────────────────── */
+.group { margin-bottom: clamp(3rem, 7vw, 5rem); }
+
+.group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.7rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.group-head h2 { margin: 0; font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+
+.group-meta {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+  gap: 1rem;
+  /* Cards size to their content. Stretching a text-only card to match one
+     with a screenshot leaves a hole in the middle of it. */
+  align-items: start;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.15rem 1.35rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgb(var(--ink-rgb) / 0.45);
+  box-shadow: 0 10px 28px rgb(58 36 23 / 0.09);
+}
+
+/* The screenshot, set beside the text. Cropped 4:3 and anchored top, because
+   a UI screenshot is recognisable by its title bar and toolbars, not by the
+   middle of its data grid. */
+.card-shot {
+  flex: 0 0 clamp(6rem, 26%, 8.5rem);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: #fff;
+}
+
+.card-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.card:hover .card-shot img { transform: scale(1.045); }
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+  min-width: 0;                  /* let long words wrap instead of pushing out */
+}
+
+.card h3 { margin: 0; font-size: 1.22rem; color: var(--ink); }
+
+.card p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: var(--muted);
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .card-shot img { transition: none; }
+  .card:hover { transform: none; }
+  .card:hover .card-shot img { transform: none; }
+}
+
+/* ── meta, tags, placeholders ────────────────────────────────────────────── */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.tag {
+  padding: 0.25em 0.6em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(var(--ground-rgb) / 0.7);
+}
+
+/* Placeholders are deliberately visible: they are a to-do list, not a
+   finished state. Remove this rule once the content is filled in. */
+.todo {
+  padding: 0.25em 0.6em;
+  border: 1px dashed rgb(168 74 38 / 0.5);
+  border-radius: 999px;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+/* ── project page ────────────────────────────────────────────────────────── */
+.project { max-width: var(--col); }
+
+.breadcrumb {
+  margin: 0 0 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.breadcrumb a { text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { opacity: 0.5; margin: 0 0.4em; }
+
+.project h1 {
+  margin: 0 0 0.8rem;
+  font-size: clamp(2rem, 4.6vw, 3rem);
+}
+
+.project .meta { margin-bottom: 2rem; }
+
+.prose > :first-child { margin-top: 0; }
+.prose p { margin: 0 0 1.15em; }
+.prose h2 { font-size: 1.35rem; margin: 2em 0 0.7em; }
+.prose ul { margin: 0 0 1.3em; padding-left: 1.1em; }
+.prose li { margin-bottom: 0.45em; }
+.prose a { text-underline-offset: 2px; }
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  gap: 0.9rem;
+  margin: 0 0 2.2rem;
+}
+
+.figures figure { margin: 0; }
+
+.figures img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: zoom-in;
+  transition: border-color 0.2s ease;
+}
+
+.figures img:hover { border-color: rgb(168 74 38 / 0.55); }
+
+.external {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: var(--col);
+  margin: 3.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.pager a {
+  flex: 1 1 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pager .next { text-align: right; }
+
+.pager span {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pager strong { font-weight: 400; color: var(--ink); }
+
+/* ── generic page prose ──────────────────────────────────────────────────── */
+.wrap > h2 { font-size: 1.5rem; margin: 2.2em 0 0.7em; }
+.wrap > p, .wrap > ul { max-width: var(--col); }
+.wrap > ul { padding-left: 1.1em; }
+.wrap > p { margin: 0 0 1.15em; }
+
+/* ── embedded CV ─────────────────────────────────────────────────────────── */
+/* The old site embedded the PDF on the resume page; keeping that, because a
+   link alone makes a visitor download a file to learn anything. */
+.pdf {
+  max-width: var(--col);
+  height: min(84svh, 58rem);
+  margin: 2rem 0 2.5rem;
+}
+
+.pdf object {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.pdf object p { padding: 2rem; color: var(--muted); }
+
+/* Phones mostly refuse to render a PDF inline, and the ones that try give you
+   a single unreadable page. Offer the file instead. */
+.pdf-small { display: none; }
+
+@media (max-width: 48rem) {
+  .pdf { display: none; }
+  .pdf-small { display: block; }
+}
+
+/* ── lightbox ────────────────────────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2vmin;
+  background: rgb(26 16 10 / 0.82);
+  cursor: zoom-out;
+}
+
+.lightbox[hidden] { display: none; }
+
+.lightbox img {
+  max-width: 96vw;
+  max-height: 96vh;
+  border-radius: 0.4rem;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.4);
+}
+
+/* ── footer ──────────────────────────────────────────────────────────────── */
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 2rem clamp(1rem, 4vw, 3rem) 3rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: center;
+}
+
+.foot p { margin: 0.35em 0; }
+.foot a { text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+
+@media (max-width: 40rem) {
+  .sitenav {
+    left: clamp(0.85rem, 3vw, 2.5rem);
+    justify-content: center;
+    gap: 0.25rem;
+  }
+  .sitenav a { padding: 0.5em 0.72em; font-size: 0.62rem; letter-spacing: 0.08em; }
+  .card { gap: 0.85rem; padding: 1rem 1.05rem; }
+  .card-shot { flex-basis: 5.5rem; }
+  .hero { min-height: 70svh; }
+}

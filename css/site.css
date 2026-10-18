@@ -411,6 +411,12 @@ h1, h2, h3 { font-weight: 400; letter-spacing: -0.015em; line-height: 1.15; }
 
 .figures img:hover { border-color: rgb(168 74 38 / 0.55); }
 
+/* Resume certificates: secondary, so two small side by side at every width. */
+.certs {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 34rem;
+}
+
 .external {
   display: inline-block;
   margin-top: 0.6rem;

@@ -411,6 +411,9 @@ h1, h2, h3 { font-weight: 400; letter-spacing: -0.015em; line-height: 1.15; }
 
 .figures img:hover { border-color: rgb(168 74 38 / 0.55); }
 
+/* A logo on its own would otherwise stretch to the full column. */
+.figures figure:only-child img[src$=".svg"] { max-width: 14rem; }
+
 /* Resume certificates: secondary, so two small side by side at every width. */
 .certs {
   grid-template-columns: repeat(2, 1fr);
